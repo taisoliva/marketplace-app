@@ -14,7 +14,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const autoId = `input-${type}-${props.name}`;
     return (
       <div>
-        <label htmlFor={autoId} className="text-gray-500 text-xs">
+        <label
+          htmlFor={autoId}
+          className="text-gray-600 text-xs uppercase font-bold"
+        >
           {label}
         </label>
         <div className="flex border-b border-input border-gray-400  focus-within:border-orangeBase text-gray-400">
