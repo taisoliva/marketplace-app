@@ -40,7 +40,7 @@ export const LoginScreen = () => {
         type={isVisible ? "text" : "password"}
       />
 
-      <Button className="w-full mt-auto">Acessar</Button>
+      <Button className="w-full mt-5">Acessar</Button>
     </>
   );
 };
