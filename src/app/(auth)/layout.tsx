@@ -1,4 +1,4 @@
-import { Icon } from "../../../public/images/Icon";
+import { Logo } from "../../../public/images/Logo";
 import { MainImage } from "../../../public/images/Main";
 
 export default function AuthLayout({
@@ -10,7 +10,7 @@ export default function AuthLayout({
     <div className="min-h-screen w-full flex items-center justify-center">
       <div className="grid grid-cols-2 w-full h-full">
         <div className="col-span-1 p-10">
-          <Icon />
+          <Logo />
           <MainImage />
         </div>
 
