@@ -11,6 +11,7 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, startContent, endContent, label, ...props }, ref) => {
+    const isFilled = Boolean(props.value);
     const autoId = `input-${type}-${props.name}`;
     return (
       <div>
@@ -21,7 +22,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {label}
         </label>
         <div className="flex border-b border-input border-gray-400  focus-within:border-orangeBase text-gray-400">
-          {startContent && <div className="pt-2 pl-2"> {startContent} </div>}
+          {startContent && (
+            <div
+              className={cn(
+                "pt-2 pl-2 transition-colors",
+                isFilled ? "text-primary" : "text-gray-400"
+              )}
+            >
+              {" "}
+              {startContent}{" "}
+            </div>
+          )}
           <input
             id={autoId}
             type={type}
