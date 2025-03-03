@@ -2,7 +2,7 @@ import { Icon } from "../../../../public/Icon";
 
 export const HeaderIcon = () => {
   return (
-    <div>
+    <div className="mr-auto">
       <Icon />
     </div>
   );

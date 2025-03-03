@@ -3,7 +3,7 @@ import { ChartNoAxesCombined, Package } from "lucide-react";
 
 export const HeaderMenu = () => {
   return (
-    <div className="flex">
+    <div className="flex mx-auto">
       <NavigationLink isActive href="/dashboard">
         <ChartNoAxesCombined /> Dashboard
       </NavigationLink>

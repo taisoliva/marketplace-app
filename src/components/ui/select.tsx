@@ -12,6 +12,7 @@ interface SelectTriggerProps
   fullWidth?: boolean;
   size?: "sm" | "md" | "lg";
   startContent?: React.ReactNode;
+  label?: string;
 }
 
 const Select = SelectPrimitive.Root;
@@ -23,33 +24,39 @@ const SelectValue = SelectPrimitive.Value;
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ className, children, startContent, ...props }, ref) => {
-  const { value } = props;
-  const hasSelection = Boolean(value);
+>(({ className, children, startContent, label, ...props }, ref) => {
+  const autoId = `select-${props.name}`;
 
-  console.log(hasSelection);
   return (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "group flex h-9 w-full text-gray-400 items-center justify-between whitespace-nowrap border-b bg-transparent px-3 py-2 text-sm   data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-0 focus:border-b-orangeBase disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-        className
-      )}
-      {...props}
-    >
-      <div className="flex items-center gap-2">
-        {startContent && (
-          <div className="text-gray-400 group-focus:text-orangeBase">
-            {" "}
-            {startContent}{" "}
-          </div>
+    <div>
+      <label
+        htmlFor={autoId}
+        className="text-gray-600 text-xs uppercase font-bold"
+      >
+        {label}
+      </label>
+      <SelectPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          "group flex h-9 w-full text-gray-400 items-center justify-between whitespace-nowrap border-b bg-transparent px-3 py-2 text-sm   data-[placeholder]:text-muted-foreground focus:outline-none focus:ring-0 focus:border-b-orangeBase disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+          className
         )}
-        {children}
-      </div>
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
+        {...props}
+      >
+        <div className="flex items-center gap-2">
+          {startContent && (
+            <div className="text-gray-400 group-focus:text-orangeBase">
+              {" "}
+              {startContent}{" "}
+            </div>
+          )}
+          {children}
+        </div>
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown className="h-4 w-4 opacity-50" />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+    </div>
   );
 });
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
