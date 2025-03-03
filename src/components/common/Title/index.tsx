@@ -3,7 +3,7 @@ interface Props {
   description: string;
 }
 
-export const Header = ({ title, description }: Props) => {
+export const Title = ({ title, description }: Props) => {
   return (
     <div className="mb-10">
       <h1 className="font-bold text-gray-950 text-2xl">{title}</h1>
