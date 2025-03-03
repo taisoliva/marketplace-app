@@ -4,18 +4,46 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input/input";
 import { Eye, EyeOff, KeyRound, Mail } from "lucide-react";
 import React from "react";
+import { useForm } from "react-hook-form";
+import { LoginSchema } from "../../schemas/login.schema";
+import { useLoginService } from "../../data/hooks/useLogin";
+import { routes } from "@/shared/utils/routes";
+import { useRouter } from "next/navigation";
 
 export const LoginScreen = () => {
   const [isVisible, setIsVisible] = React.useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<LoginSchema>();
+
+  const { mutateAsync: login } = useLoginService();
+
+  const onSubmit = async (data: LoginSchema) => {
+    try {
+      await login({ data });
+
+      router.push(`${routes.dashboard}`);
+    } catch {
+      setError("email", { message: "E-mail ou senha inválidos" });
+      setError("password", { message: "E-mail ou senha inválidos" });
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Input
         startContent={<Mail />}
         placeholder="Seu e-mail cadastrado"
         label={"E-MAIL"}
-        name="email"
+        type="email"
+        {...register("email")}
+        error={errors.email?.message}
       />
 
       <Input
@@ -36,11 +64,12 @@ export const LoginScreen = () => {
         }
         placeholder="Sua senha de acesso"
         label={"SENHA"}
-        name="password"
         type={isVisible ? "text" : "password"}
+        {...register("password")}
+        error={errors.password?.message}
       />
 
       <Button className="w-full mt-5">Acessar</Button>
-    </>
+    </form>
   );
 };

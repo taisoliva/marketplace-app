@@ -7,28 +7,26 @@ export interface InputProps
   startContent?: React.ReactNode;
   endContent?: React.ReactNode;
   label?: string;
+  error?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, startContent, endContent, label, ...props }, ref) => {
-    const isFilled = Boolean(props.value);
+  (
+    { className, type, startContent, endContent, label, error, ...props },
+    ref
+  ) => {
     const autoId = `input-${type}-${props.name}`;
     return (
-      <div>
+      <div className="group">
         <label
           htmlFor={autoId}
-          className="text-gray-600 text-xs uppercase font-bold"
+          className="text-gray-600 text-xs uppercase font-bold group-focus-within:text-primary"
         >
           {label}
         </label>
         <div className="flex border-b border-input border-gray-400  focus-within:border-orangeBase text-gray-400">
           {startContent && (
-            <div
-              className={cn(
-                "pt-2 pl-2 transition-colors",
-                isFilled ? "text-primary" : "text-gray-400"
-              )}
-            >
+            <div className="pt-2 pl-2 transition-colors text-gray-400 group-focus-within:text-primary">
               {" "}
               {startContent}{" "}
             </div>
@@ -45,6 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {endContent && <div className="pt-2 pl-2"> {endContent} </div>}
         </div>
+        {error && <p className="text-red-500 text-sm">{error}</p>}
       </div>
     );
   }
