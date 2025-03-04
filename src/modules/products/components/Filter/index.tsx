@@ -19,7 +19,6 @@ export const Filter = () => {
   const [value, setValue] = useState("");
 
   const handleSelectChange = (value: string) => {
-    console.log("chefguei");
     setValue(value);
   };
 

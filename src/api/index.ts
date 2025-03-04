@@ -13,6 +13,18 @@ class HttpAdapter {
       withCredentials: true,
     });
 
+    api.interceptors.response.use(
+      (response) => {
+        if (response.data.access_token) {
+          document.cookie = `auth=${response.data.access_token}; path=/; secure; HttpOnly; samesite=strict`;
+        }
+        return response;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
     return api;
   }
 }

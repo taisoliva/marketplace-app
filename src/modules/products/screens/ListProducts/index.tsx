@@ -18,8 +18,6 @@ export const ListProducts = () => {
     enabled: true,
   });
 
-  console.log(data);
-
   return (
     <div className="grid grid-cols-[1fr_2fr] gap-3">
       <Filter />

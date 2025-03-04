@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadImage } from "@/components/common/upload";
+import { UploadImage } from "@/modules/register/components/UploadImage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input/input";
 import {
@@ -13,27 +13,63 @@ import {
   User,
 } from "lucide-react";
 import React from "react";
+import { useForm } from "react-hook-form";
+import { registerForm, RegisterSchema } from "../../schemas/register.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRegisterService } from "../../data/hooks/useRegister";
+import { useRouter } from "next/navigation";
+import { routes } from "@/shared/utils/routes";
 
 export const RegisterForm = () => {
   const [isVisible, setIsVisible] = React.useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    setValue,
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerForm),
+  });
+
+  const { mutateAsync: registerSeller } = useRegisterService();
+
+  const router = useRouter();
+
+  const onSubmit = async (data: RegisterSchema) => {
+    try {
+      await registerSeller(data);
+
+      router.push(`${routes.login}`);
+    } catch {
+      setError("email", { message: "E-mail ou senha inválidos" });
+      setError("password", { message: "E-mail ou senha inválidos" });
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <h1 className="font-bold text-xl">Perfil</h1>
-      <UploadImage />
+
+      <UploadImage setValue={setValue} />
 
       <div className="mt-5">
         <Input
           startContent={<User />}
           placeholder="Seu nome completo"
           label="Nome"
+          {...register("name")}
+          error={errors.name?.message}
         />
 
         <Input
           startContent={<Phone />}
           placeholder="(00) 00000-0000"
           label="Telefone"
+          {...register("phone")}
+          error={errors.phone?.message}
         />
       </div>
 
@@ -43,6 +79,8 @@ export const RegisterForm = () => {
           placeholder="Seu e-mail de acesso"
           label="E-mail"
           startContent={<Mail />}
+          {...register("email")}
+          error={errors.email?.message}
         />
 
         <Input
@@ -63,8 +101,9 @@ export const RegisterForm = () => {
           }
           placeholder="Sua senha de acesso"
           label={"SENHA"}
-          name="password"
           type={isVisible ? "text" : "password"}
+          {...register("password")}
+          error={errors.password?.message}
         />
 
         <Input
@@ -85,8 +124,9 @@ export const RegisterForm = () => {
           }
           placeholder="Confirme a senha"
           label={"Confirmar senha"}
-          name="password"
           type={isVisible ? "text" : "password"}
+          {...register("passwordConfirmation")}
+          error={errors.passwordConfirmation?.message}
         />
       </div>
 
