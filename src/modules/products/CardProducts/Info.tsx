@@ -6,7 +6,7 @@ interface InfoProps {
 
 export const Info = ({ name, description, price }: InfoProps) => {
   return (
-    <div className="flex flex-col gap-2 m-4">
+    <div className="flex flex-col gap-2 m-4 p-4">
       <div className="flex justify-between">
         <p className="font-bold">{name}</p>
         <p className="font-bold">

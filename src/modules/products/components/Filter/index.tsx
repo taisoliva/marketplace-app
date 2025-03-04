@@ -24,7 +24,7 @@ export const Filter = () => {
   };
 
   return (
-    <div className="w-fit rounded-lg bg-white p-4 h-fit">
+    <div className="w-96 rounded-lg bg-white p-4 h-fit">
       <div className="flex flex-col gap-4">
         <h1 className="text-md font-bold"> Filtrar </h1>
         <Input

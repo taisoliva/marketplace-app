@@ -28,7 +28,7 @@ const NavigationLink = React.forwardRef<HTMLAnchorElement, NavigationLinkProps>(
       <Comp
         ref={ref}
         className={cn(
-          "flex items-center gap-1 justify-center px-4 py-2 text-sm transition-colors",
+          "flex items-center gap-1 justify-center px-4 py-2 text-sm transition-colors hover:cursor-pointer hover:bg-[#F5EAEA] hover:text-[#F24D0D] ",
           {
             "bg-[#F5EAEA] text-[#F24D0D] rounded-xl font-bold hover:cursor-default":
               isActive,
