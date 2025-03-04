@@ -1,10 +1,10 @@
 "use client";
 
 import { RegisterSchema } from "@/modules/register/schemas/register.schema";
+import { useAttachmentService } from "@/shared/data/hooks/useAttachment";
 import { ImageUp } from "lucide-react";
 import { useRef, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { useAttachmentService } from "../../data/hooks/useAttachment";
 
 interface UploadImageProps {
   setValue: UseFormSetValue<RegisterSchema>;

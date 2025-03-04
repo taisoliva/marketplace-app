@@ -39,3 +39,7 @@ export type IListProductsParams = {
   search?: string;
   status?: string;
 };
+
+export type ICategoriesResponse = {
+  categories: Category[];
+};

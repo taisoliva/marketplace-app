@@ -6,29 +6,77 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useProductForm } from "../../context/form.context";
+import { CreateProductSchema } from "../../schemas/form.schema";
+import { Controller } from "react-hook-form";
+import { Form } from "../../components/Forms";
+import { useCategories } from "../../data/hooks/useListCategories";
+import { useCreateProductService } from "../../data/hooks/useCreateProduct";
+import { routes } from "@/shared/utils/routes";
+import { useRouter } from "next/navigation";
 
 export const FormInput = () => {
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useProductForm();
+
+  const { data } = useCategories();
+
+  const { mutateAsync: createProduct } = useCreateProductService();
+
+  const onSubmit = async (data: CreateProductSchema) => {
+    try {
+      await createProduct(data);
+
+      router.push(`${routes.products}`);
+    } catch {}
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="grid grid-cols-[2fr_1fr] gap-4">
-        <Input label="Título" className="w-4/5" />
-        <Input label="Valor" startContent={"R$"} />
+        <Input
+          label="Título"
+          className="w-4/5"
+          {...register("title")}
+          error={errors.title?.message}
+        />
+        <Input
+          label="Valor"
+          startContent={"R$"}
+          {...register("priceInCents")}
+          error={errors.priceInCents?.message}
+        />
       </div>
       <div>
-        <Input label="Descrição" />
+        <Input label="Descrição" {...register("description")} />
       </div>
       <div>
-        <Select>
-          <SelectTrigger label="Categoria">
-            <SelectValue placeholder="Selecione" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Anunciado</SelectItem>
-            <SelectItem value="dark">Vendido</SelectItem>
-            <SelectItem value="system">Cancelado</SelectItem>
-          </SelectContent>
-        </Select>
+        <Controller
+          control={control}
+          name="categoryId"
+          render={({ field: { onChange, value } }) => (
+            <Select value={value} onValueChange={onChange}>
+              <SelectTrigger label="Categoria">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                {data?.categories.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
       </div>
-    </>
+
+      <Form.Buttons />
+    </form>
   );
 };
