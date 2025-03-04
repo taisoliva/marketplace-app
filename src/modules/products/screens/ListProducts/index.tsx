@@ -2,12 +2,9 @@
 
 import { CardProducts } from "../../CardProducts";
 import { Filter } from "../../components/Filter";
-import Link from "next/link";
 import { useAvailableProducts } from "../../data/hooks/useListProducts";
 import { useQueryState } from "nuqs";
-import { If } from "@/shared/components/If";
-import { Loader2 } from "lucide-react";
-import Image from "next/image";
+
 export const ListProducts = () => {
   const [status, setStatus] = useQueryState("status");
   const [search, setSearch] = useQueryState("search");
@@ -32,6 +29,8 @@ export const ListProducts = () => {
             <CardProducts.Image
               src={product.attachments[0].url}
               alt={product.title}
+              tag={product.status as "available" | "sold" | "cancelled"}
+              category={product.category.title}
             />
 
             <CardProducts.Info
