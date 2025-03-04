@@ -1,6 +1,5 @@
 "use client";
 
-import { UploadImage } from "@/modules/register/components/UploadImage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input/input";
 import {
@@ -19,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRegisterService } from "../../data/hooks/useRegister";
 import { useRouter } from "next/navigation";
 import { routes } from "@/shared/utils/routes";
+import { UploadImage } from "../UploadImage";
 
 export const RegisterForm = () => {
   const [isVisible, setIsVisible] = React.useState(false);
