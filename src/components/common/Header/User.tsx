@@ -16,7 +16,7 @@ export const HeaderUser = () => {
         <Button>+ Novo produto</Button>
       </Link>
       <Avatar>
-        {profile?.avatar.url ? (
+        {profile?.avatar?.url ? (
           <AvatarImage src={profile?.avatar?.url} />
         ) : (
           <AvatarImage src="https://i.imgur.com/6VBx3io.png" />
