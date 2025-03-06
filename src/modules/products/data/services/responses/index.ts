@@ -9,7 +9,7 @@ type Owner = {
   };
 };
 
-type Category = {
+export type Category = {
   id: string;
   title: string;
   slug: string;
@@ -42,4 +42,8 @@ export type IListProductsParams = {
 
 export type ICategoriesResponse = {
   categories: Category[];
+};
+
+export type IProduct = {
+  product: Product;
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { eStatusProduct } from "@/shared/enums";
 import Image from "next/image";
 
 interface ImageProps {
@@ -16,14 +17,14 @@ export const ProductImage = ({ src, alt, tag, category }: ImageProps) => {
       <div className="flex absolute top-2 right-2 z-10 gap-2">
         <div
           className={cn("text-white px-3 py-1 text-sm font-medium rounded-lg", {
-            "bg-blue-500": tag === "available",
-            "bg-green-500": tag === "sold",
-            "bg-red-500": tag === "cancelled",
+            "bg-blue-500": tag === eStatusProduct.Available,
+            "bg-green-500": tag === eStatusProduct.Sold,
+            "bg-red-500": tag === eStatusProduct.Cancelled,
           })}
         >
-          {tag === "available"
+          {tag === eStatusProduct.Available
             ? "Anunciado"
-            : tag === "sold"
+            : tag === eStatusProduct.Sold
             ? "Vendido"
             : "Cancelado"}
         </div>

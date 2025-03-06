@@ -7,16 +7,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProductForm } from "../../context/form.context";
-import { CreateProductSchema } from "../../schemas/form.schema";
 import { Controller } from "react-hook-form";
 import { Form } from "../../components/Forms";
-import { useCategories } from "../../data/hooks/useListCategories";
-import { useCreateProductService } from "../../data/hooks/useCreateProduct";
-import { routes } from "@/shared/utils/routes";
-import { useRouter } from "next/navigation";
 
-export const FormInput = () => {
-  const router = useRouter();
+import { useCategories } from "../../data/hooks/useListCategories";
+import { CreateProductSchema } from "../../schemas/form.schema";
+
+interface Props {
+  onSubmit: (data: CreateProductSchema) => void;
+}
+
+export const FormInput = ({ onSubmit }: Props) => {
   const {
     register,
     handleSubmit,
@@ -25,16 +26,6 @@ export const FormInput = () => {
   } = useProductForm();
 
   const { data } = useCategories();
-
-  const { mutateAsync: createProduct } = useCreateProductService();
-
-  const onSubmit = async (data: CreateProductSchema) => {
-    try {
-      await createProduct(data);
-
-      router.push(`${routes.products}`);
-    } catch {}
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">

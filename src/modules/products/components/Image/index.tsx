@@ -5,9 +5,15 @@ import { ImageUp } from "lucide-react";
 import React, { useState } from "react";
 import { useProductForm } from "../../context/form.context";
 
-export const ImageProduct = () => {
+interface Props {
+  imageId?: string | null;
+  imageUrl?: string | null;
+}
+export const ImageProduct = ({ imageId, imageUrl }: Props) => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null | undefined>(
+    imageUrl
+  );
 
   const {
     setValue,
@@ -19,6 +25,10 @@ export const ImageProduct = () => {
       fileInputRef.current.click();
     }
   };
+
+  if (imageId) {
+    setValue("attachmentsIds", [imageId]);
+  }
 
   const { mutateAsync: attachment } = useAttachmentService();
 
@@ -42,7 +52,7 @@ export const ImageProduct = () => {
 
   return (
     <div
-      className="w-full h-full bg-[#F5EAEA] flex items-center justify-center hover:cursor-pointer"
+      className="w-full h-full bg-[#F5EAEA] flex items-center justify-center hover:cursor-pointer rounded-xl"
       onClick={handleClick}
       onChange={handleFileChange}
     >
