@@ -15,6 +15,11 @@ import { eStatusProduct } from "@/shared/enums";
 import { CreateProductSchema } from "../../schemas/form.schema";
 import { useRouter } from "next/navigation";
 import { useEditProductService } from "../../data/hooks/useEditProduct";
+import { useStatusProductService } from "../../data/hooks/useStatusProduct";
+import {
+  statusTranslations,
+  textByStatusTranslations,
+} from "@/shared/utils/translate";
 
 interface Props {
   id: string;
@@ -31,7 +36,6 @@ export const EditProduct = ({ id }: Props) => {
   });
 
   const onSubmit = async (data: CreateProductSchema) => {
-    console.log(data);
     try {
       await editProduct(data);
 
@@ -39,6 +43,17 @@ export const EditProduct = ({ id }: Props) => {
     } catch {}
   };
 
+  const { mutateAsync: changeStatus } = useStatusProductService({
+    id,
+  });
+
+  const handleStatus = async (status: string) => {
+    try {
+      await changeStatus(status);
+
+      router.push(`${routes.products}`);
+    } catch {}
+  };
   return (
     <>
       <If condition={isLoading}>
@@ -62,19 +77,86 @@ export const EditProduct = ({ id }: Props) => {
                 description="Gerencie as informações do produto cadastrado"
               />
               <div className="flex gap-4 text-sm text-primary">
-                <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  className="text-primary hover:bg-transparent hover:text-primary/50"
+                  onClick={() => {
+                    if (product?.product.status === eStatusProduct.Available) {
+                      handleStatus(eStatusProduct.Sold);
+                    } else {
+                      handleStatus(eStatusProduct.Available);
+                    }
+                  }}
+                >
                   <Check className="w-5 h-5" />
-                  <p>Marcar como vendido</p>
-                </div>
-                <div className="flex items-center gap-2">
+                  <p>
+                    {
+                      textByStatusTranslations[
+                        product?.product
+                          .status as keyof typeof textByStatusTranslations
+                      ]
+                    }
+                  </p>
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-primary hover:bg-transparent hover:text-primary/50"
+                  disabled={
+                    product?.product.status === eStatusProduct.Cancelled
+                  }
+                  onClick={() => handleStatus(eStatusProduct.Cancelled)}
+                >
                   <Ban className="w-5 h-5" />
                   <p>Desativar anúncio</p>
-                </div>
+                </Button>
               </div>
             </div>
           </div>
 
-          <ProductFormProvider data={product}>
+          <fieldset
+            disabled={product?.product.status === eStatusProduct.Cancelled}
+          >
+            <ProductFormProvider data={product}>
+              <div className="grid grid-cols-[1fr_2fr] gap-4">
+                <div className="w-full h-80">
+                  <ImageProduct
+                    imageId={product?.product.attachments[0].id}
+                    imageUrl={product?.product.attachments[0].url}
+                    isDisabled={
+                      product?.product.status === eStatusProduct.Cancelled
+                    }
+                  />
+                </div>
+                <div className="w-full h-96 bg-white rounded-lg p-5 gap-5 flex flex-col">
+                  <Form.Header>
+                    <p
+                      className={cn(
+                        "text-white px-3 py-1 text-sm font-medium rounded-lg",
+                        {
+                          "bg-blue-500":
+                            product?.product.status ===
+                            eStatusProduct.Available,
+                          "bg-green-500":
+                            product?.product.status === eStatusProduct.Sold,
+                          "bg-red-500":
+                            product?.product.status ===
+                            eStatusProduct.Cancelled,
+                        }
+                      )}
+                    >
+                      {statusTranslations[
+                        product?.product
+                          .status as keyof typeof statusTranslations
+                      ] ?? "Status desconhecido"}
+                    </p>
+                  </Form.Header>
+
+                  <Form.Inputs onSubmit={onSubmit} />
+                </div>
+              </div>
+            </ProductFormProvider>
+          </fieldset>
+          {/* <ProductFormProvider data={product}>
             <div className="grid grid-cols-[1fr_2fr] gap-4">
               <div className="w-full h-80">
                 <ImageProduct
@@ -97,14 +179,16 @@ export const EditProduct = ({ id }: Props) => {
                       }
                     )}
                   >
-                    {product?.product.status}
+                    {statusTranslations[
+                      product?.product.status as keyof typeof statusTranslations
+                    ] ?? "Status desconhecido"}
                   </p>
                 </Form.Header>
 
                 <Form.Inputs onSubmit={onSubmit} />
               </div>
             </div>
-          </ProductFormProvider>
+          </ProductFormProvider> */}
         </div>
       </If>
     </>

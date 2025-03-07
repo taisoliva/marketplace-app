@@ -4,12 +4,14 @@ import { useAttachmentService } from "@/shared/data/hooks/useAttachment";
 import { ImageUp } from "lucide-react";
 import React, { useState } from "react";
 import { useProductForm } from "../../context/form.context";
+import { cn } from "@/lib/utils";
 
 interface Props {
   imageId?: string | null;
   imageUrl?: string | null;
+  isDisabled?: boolean;
 }
-export const ImageProduct = ({ imageId, imageUrl }: Props) => {
+export const ImageProduct = ({ imageId, imageUrl, isDisabled }: Props) => {
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null | undefined>(
     imageUrl
@@ -52,7 +54,12 @@ export const ImageProduct = ({ imageId, imageUrl }: Props) => {
 
   return (
     <div
-      className="w-full h-full bg-[#F5EAEA] flex items-center justify-center hover:cursor-pointer rounded-xl"
+      className={cn(
+        "w-full h-full bg-[#F5EAEA] flex items-center justify-center hover:cursor-pointer rounded-xl",
+        {
+          "hover:cursor-not-allowed": isDisabled,
+        }
+      )}
       onClick={handleClick}
       onChange={handleFileChange}
     >
