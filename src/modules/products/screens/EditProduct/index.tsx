@@ -102,7 +102,7 @@ export const EditProduct = ({ id }: Props) => {
                   variant="ghost"
                   className="text-primary hover:bg-transparent hover:text-primary/50"
                   disabled={
-                    product?.product.status === eStatusProduct.Cancelled
+                    product?.product.status !== eStatusProduct.Available
                   }
                   onClick={() => handleStatus(eStatusProduct.Cancelled)}
                 >

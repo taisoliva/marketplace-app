@@ -8,10 +8,10 @@ import { useQueryState } from "nuqs";
 import { routes } from "@/shared/utils/routes";
 
 export const ListProducts = () => {
-  const [status, setStatus] = useQueryState("status");
-  const [search, setSearch] = useQueryState("search");
+  const [status] = useQueryState("status");
+  const [search] = useQueryState("search");
 
-  const { data, isLoading } = useAvailableProducts({
+  const { data } = useAvailableProducts({
     params: {
       status: status ?? undefined,
       search: search ?? undefined,

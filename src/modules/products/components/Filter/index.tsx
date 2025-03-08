@@ -10,45 +10,71 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Search, Tag } from "lucide-react";
-import { useState } from "react";
+import { Search } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import {
+  filterProductForm,
+  FilterProductSchema,
+} from "../../schemas/filter.form.schema";
+import { eStatusProduct } from "@/shared/enums";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryState } from "nuqs";
 
 export const Filter = () => {
-  const [search, setSearch] = useState("");
+  const [status, setStatus] = useQueryState("status");
+  const [search, setSearch] = useQueryState("search");
 
-  const [value, setValue] = useState("");
+  const { register, control, handleSubmit } = useForm<FilterProductSchema>({
+    resolver: zodResolver(filterProductForm),
+    defaultValues: {
+      search: search ?? undefined,
+      status: status ?? undefined,
+    },
+  });
 
-  const handleSelectChange = (value: string) => {
-    setValue(value);
+  const onSubmit = (data: FilterProductSchema) => {
+    setStatus(data.status ?? null);
+    setSearch(data.search ?? null);
   };
 
   return (
-    <div className="w-96 rounded-lg bg-white p-4 h-fit">
+    <form
+      className="w-96 rounded-lg bg-white p-4 h-fit"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="flex flex-col gap-4">
         <h1 className="text-md font-bold"> Filtrar </h1>
         <Input
           startContent={<Search />}
           placeholder="Pesquisar"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          {...register("search")}
         />
-        <Select
-          value={value}
-          onValueChange={handleSelectChange}
-          defaultValue="light"
-        >
-          <SelectTrigger startContent={<Tag />}>
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Anunciado</SelectItem>
-            <SelectItem value="dark">Vendido</SelectItem>
-            <SelectItem value="system">Cancelado</SelectItem>
-          </SelectContent>
-        </Select>
 
-        <Button className="w-full">Aplicar filtro</Button>
+        <Controller
+          control={control}
+          name="status"
+          render={({ field: { onChange, value } }) => (
+            <Select value={value} onValueChange={onChange}>
+              <SelectTrigger label="Status">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={eStatusProduct.Available}>
+                  Anunciado
+                </SelectItem>
+                <SelectItem value={eStatusProduct.Sold}>Vendido</SelectItem>
+                <SelectItem value={eStatusProduct.Cancelled}>
+                  Cancelado
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+
+        <Button type="submit" className="w-full">
+          Aplicar filtro
+        </Button>
       </div>
-    </div>
+    </form>
   );
 };
