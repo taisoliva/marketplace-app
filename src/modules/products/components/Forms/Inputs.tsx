@@ -41,6 +41,11 @@ export const FormInput = ({ onSubmit }: Props) => {
           startContent={"R$"}
           {...register("priceInCents")}
           error={errors.priceInCents?.message}
+          format="currency"
+          decimalSeparator=","
+          thousandSeparator="."
+          locale="pt-BR"
+          precision={2}
         />
       </div>
       <div>

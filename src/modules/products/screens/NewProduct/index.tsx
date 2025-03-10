@@ -14,6 +14,7 @@ export const NewProductScreen = () => {
   const { mutateAsync: createProduct } = useCreateProductService();
 
   const onSubmit = async (data: CreateProductSchema) => {
+    console.log(data);
     try {
       await createProduct(data);
 

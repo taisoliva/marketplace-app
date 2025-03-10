@@ -70,6 +70,8 @@ export const RegisterForm = () => {
           label="Telefone"
           {...register("phone")}
           error={errors.phone?.message}
+          mask="(__) _____-____"
+          replacement={{ _: /\d/ }}
         />
       </div>
 
